@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyTextView">
+        <attr name="label" format="string"/>
+        <attr name="mock_labelColor" format="color"/>
+        <attr name="label_size" format="dimension"/>
+        <attr name="label_max_length" format="integer"/>
+    </declare-styleable>
+</resources>
