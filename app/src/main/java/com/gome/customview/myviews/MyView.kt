@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.LinearLayout
 import com.gome.customview.R
 
 /**
@@ -39,7 +40,7 @@ class MyTextView :
     private var mLabel: String
     private var mLabelColor: Int = Color.BLACK
     private var mMaxLength = Int.MAX_VALUE
-    private var mTextSize: Int = 15
+    private var mTextSize: Int = sp2px(context, 15)
     private var mPaint: Paint
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -51,7 +52,7 @@ class MyTextView :
         mLabel = ta.getString(R.styleable.MyTextView_label) ?: ""
         mLabelColor = ta.getColor(R.styleable.MyTextView_mock_labelColor, Color.BLACK)
         mMaxLength = ta.getInt(R.styleable.MyTextView_label_max_length, Int.MAX_VALUE)
-        mTextSize = ta.getDimensionPixelSize(R.styleable.MyTextView_label_size, 15)
+        mTextSize = ta.getDimensionPixelSize(R.styleable.MyTextView_label_size, sp2px(context, 15))
         ta.recycle()
 
         mPaint = Paint().apply {
@@ -66,6 +67,8 @@ class MyTextView :
 
     constructor(context: Context) : this(context, null)
 
+    private val bounds: Rect = Rect()
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
@@ -76,17 +79,32 @@ class MyTextView :
         Log.d(TAG, "onMeasure: withMode: $widthMode heightMode: $heightMode")
         if (widthMode == MeasureSpec.AT_MOST) {
             // wrap_content与内容有关 用画笔来测量
-            val bounds = Rect()
             mPaint.getTextBounds(mLabel, 0, mLabel.length, bounds)
-            widthSize = bounds.width()
-            heightSize = bounds.height()
+            widthSize = bounds.width() + paddingLeft + paddingRight
+        }
+        if (heightMode == MeasureSpec.AT_MOST) {
+            // wrap_content与内容有关 用画笔来测量
+            mPaint.getTextBounds(mLabel, 0, mLabel.length, bounds)
+            heightSize = bounds.height() + paddingTop + paddingBottom
         }
         setMeasuredDimension(widthSize, heightSize)
-
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawText(mLabel, 0F, (height/2).toFloat(), mPaint)
+        super.onDraw(canvas)
+        val fontMetrics = mPaint.fontMetrics
+        // 要将文字垂直居中，首先找到文字所在控件的竖直方向的中点，然后加上文字高度的一半，就是文字需要展示位置的底部，再根据baseline和底部差值（fontMetrics.bottom/fontMetrics.top）计算得出画文字的baseline。
+        fontMetrics.top
+        fontMetrics.bottom
+        fontMetrics.ascent
+        fontMetrics.descent
+        fontMetrics.descent
+        val dis = fontMetrics.bottom - fontMetrics.top
+        val h = height
+        val baseline =
+            height / 2 + ((fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom)
+        // drawText的时候需要考虑padding
+        canvas.drawText(mLabel, paddingLeft.toFloat(), baseline, mPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {

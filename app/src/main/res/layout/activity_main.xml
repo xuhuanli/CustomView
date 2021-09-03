@@ -9,10 +9,26 @@
     <com.gome.customview.myviews.MyTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200"
+        android:padding="10dp"
         app:label="MyTextView"
+        app:label_size="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.074" />
+
+    <com.gome.customview.myviews.QQStepView
+        android:id="@+id/qq_sv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:outerColor="@color/purple_700"
+        app:innerColor="@color/teal_700"
+        app:stepTextSize="16dp"
+        app:stepTextColor="@color/purple_200"
+        app:borderWidth="6dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
